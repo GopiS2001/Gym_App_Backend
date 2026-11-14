@@ -1,0 +1,13 @@
+node_modules
+dist
+.env
+uploads/*
+!uploads/.gitkeep
+*.log
+
+# Database dumps contain personal data
+backups/
+*.sql
+
+# Tooling output
+.playwright-mcp/

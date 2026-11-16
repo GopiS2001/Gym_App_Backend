@@ -367,6 +367,7 @@ export class NutritionService {
         continue;
       }
       map.set(key, {
+        foodId: log.foodId,
         foodName: log.foodName,
         mealType: log.mealType,
         quantity: toNumber(log.quantity),

@@ -242,19 +242,17 @@ export class MealRemindersService {
   }
 
   async updateWorkoutSchedule(userId: string, dto: UpdateWorkoutScheduleDto) {
-    const data: any = {};
+    const data: Prisma.UserSettingUncheckedUpdateInput = {};
     if (dto.workoutTime !== undefined) data.workoutTime = dto.workoutTime;
     if (dto.workoutDays !== undefined) {
-      // An empty list is treated like "follow my plan".
+      // An empty list means "follow my workout plan", stored as SQL NULL
+      // (Prisma needs its DbNull sentinel for that in a Json column).
       const days = dto.workoutDays === null ? [] : asDayList(dto.workoutDays);
-      data.workoutDays = days.length ? days : null;
+      data.workoutDays = days.length ? days : Prisma.DbNull;
     }
     if (dto.workoutDurationMin !== undefined) data.workoutDurationMin = dto.workoutDurationMin;
     if (dto.preWorkoutLeadMin !== undefined) data.preWorkoutLeadMin = dto.preWorkoutLeadMin;
     if (dto.postWorkoutDelayMin !== undefined) data.postWorkoutDelayMin = dto.postWorkoutDelayMin;
-
-    // Prisma needs the JSON null sentinel to store SQL NULL in a Json column.
-    if (data.workoutDays === null) data.workoutDays = (await import('@prisma/client')).Prisma.DbNull;
 
     const settings = await this.prisma.userSetting.upsert({
       where: { userId },

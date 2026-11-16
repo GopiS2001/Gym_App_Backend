@@ -509,9 +509,42 @@ model ProgressPhoto {
 
 // ---------------------------------------------------------------- LIFESTYLE
 
+/// Food Library: the master catalogue. Nutrition values are per
+/// `servingSize` × `servingUnit` (e.g. 100 g, or 1 piece). Rows with no
+/// userId are the built-in library; the rest were added in the app.
+model Food {
+  id          String   @id @default(uuid()) @db.Char(36)
+  userId      String?  @map("user_id") @db.Char(36)
+  name        String   @db.VarChar(160)
+  category    String?  @db.VarChar(60)
+  servingSize Decimal  @default(1) @map("serving_size") @db.Decimal(8, 2)
+  servingUnit String   @default("serving") @map("serving_unit") @db.VarChar(40)
+  calories    Decimal  @default(0) @db.Decimal(8, 2)
+  proteinG    Decimal  @default(0) @map("protein_g") @db.Decimal(8, 2)
+  carbsG      Decimal  @default(0) @map("carbs_g") @db.Decimal(8, 2)
+  fatG        Decimal  @default(0) @map("fat_g") @db.Decimal(8, 2)
+  fibreG      Decimal? @map("fibre_g") @db.Decimal(8, 2)
+  imageUrl    String?  @map("image_url") @db.Text
+  isCustom    Boolean  @default(false) @map("is_custom")
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  user     User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  foodLogs FoodLog[]
+
+  @@index([name])
+  @@index([category])
+  @@map("foods")
+}
+
+/// One food eaten: a Food Intake item. Name, unit and nutrition are a
+/// snapshot taken when logged, so editing the Food Library later never
+/// changes past entries. Entries for one date + meal type form that meal.
 model FoodLog {
   id           String   @id @default(uuid()) @db.Char(36)
   userId       String   @map("user_id") @db.Char(36)
+  foodId       String?  @map("food_id") @db.Char(36)
   foodName     String   @map("food_name") @db.VarChar(160)
   mealType     MealType @map("meal_type")
   quantity     Decimal  @default(1) @db.Decimal(8, 2)

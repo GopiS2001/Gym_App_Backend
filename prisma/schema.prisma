@@ -142,6 +142,8 @@ model User {
   bodyMeasurements BodyMeasurement[]
   progressPhotos   ProgressPhoto[]
   foodLogs         FoodLog[]
+  foods            Food[]
+  mealReminders    MealReminder[]
   waterLogs        WaterLog[]
   sleepLogs        SleepLog[]
   attendance       GymAttendance[]

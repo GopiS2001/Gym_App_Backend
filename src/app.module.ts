@@ -15,6 +15,8 @@ import { WorkoutSessionsModule } from './workout-sessions/workout-sessions.modul
 import { ProgressModule } from './progress/progress.module';
 import { NutritionModule } from './nutrition/nutrition.module';
 import { WaterModule } from './water/water.module';
+import { FoodsModule } from './foods/foods.module';
+import { MealRemindersModule } from './meal-reminders/meal-reminders.module';
 import { SleepModule } from './sleep/sleep.module';
 import { AttendanceModule } from './attendance/attendance.module';
 import { AnalyticsModule } from './analytics/analytics.module';

@@ -288,8 +288,8 @@ export class NutritionService {
   }
 
   /** Daily totals over a range, for the nutrition trend chart. */
-  async history(userId: string, days = 7) {
-    const to = toDateOnly(new Date());
+  async history(userId: string, days = 7, endDate?: string) {
+    const to = toDateOnly(endDate || new Date());
     const from = addDays(to, -(days - 1));
 
     const logs = await this.prisma.foodLog.findMany({

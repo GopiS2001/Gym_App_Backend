@@ -62,6 +62,7 @@ export class CreateFoodLogDto {
   quantityUnit?: string;
 
   @ApiProperty({ example: 550 })
+  @ValidateIf((o) => !o.foodId)
   @Type(() => Number)
   @IsNumber({}, { message: 'Calories must be a number' })
   @Min(0)

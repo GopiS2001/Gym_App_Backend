@@ -254,11 +254,8 @@ export class MealRemindersService {
     if (dto.preWorkoutLeadMin !== undefined) data.preWorkoutLeadMin = dto.preWorkoutLeadMin;
     if (dto.postWorkoutDelayMin !== undefined) data.postWorkoutDelayMin = dto.postWorkoutDelayMin;
 
-    const settings = await this.prisma.userSetting.upsert({
-      where: { userId },
-      update: data,
-      create: { userId, ...data },
-    });
+    await this.prisma.userSetting.upsert({ where: { userId }, update: {}, create: { userId } });
+    const settings = await this.prisma.userSetting.update({ where: { userId }, data });
     return this.buildSchedule(userId, settings);
   }
 

@@ -165,15 +165,36 @@ export class NutritionService {
   }
 
   async update(userId: string, id: string, dto: UpdateFoodLogDto) {
-    await this.findOne(userId, id);
+    const entry = await this.prisma.foodLog.findFirst({ where: { id, userId } });
+    if (!entry) throw new NotFoundException('Food entry not found');
 
-    const data: any = { ...dto };
-    if (dto.consumedAt) {
-      data.consumedAt = new Date(dto.consumedAt);
-      data.loggedDate = toDateOnly(data.consumedAt);
+    const { foodId, loggedDate, clientOpId: _ignored, ...rest } = dto;
+    let data: Prisma.FoodLogUncheckedUpdateInput = { ...rest };
+
+    const quantity = dto.quantity ?? toNumber(entry.quantity);
+    const sentNutrition =
+      dto.calories !== undefined ||
+      dto.proteinG !== undefined ||
+      dto.carbsG !== undefined ||
+      dto.fatG !== undefined;
+
+    if (foodId && foodId !== entry.foodId) {
+      // Switched to a different library food: take a fresh snapshot.
+      data = { ...data, ...(await this.snapshotFromLibrary(userId, foodId, quantity)) };
+    } else if (entry.foodId && dto.quantity !== undefined && !sentNutrition) {
+      // Same library food, new amount: scale this entry's own snapshot.
+      data = { ...data, ...this.rescaleSnapshot(entry, dto.quantity) };
     }
 
-    return this.prisma.foodLog.update({ where: { id }, data });
+    if (dto.consumedAt) {
+      data.consumedAt = new Date(dto.consumedAt);
+      data.loggedDate = toDateOnly(loggedDate || data.consumedAt);
+    } else if (loggedDate) {
+      data.loggedDate = toDateOnly(loggedDate);
+    }
+
+    const updated = await this.prisma.foodLog.update({ where: { id }, data });
+    return { ...updated, mealTypeLabel: MEAL_LABELS[updated.mealType] };
   }
 
   async remove(userId: string, id: string) {

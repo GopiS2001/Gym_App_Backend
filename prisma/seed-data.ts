@@ -687,3 +687,55 @@ export const GOAL_TYPES: SeedGoalType[] = [
   { name: 'Weight Maintenance', slug: 'weight-maintenance', description: 'Hold your current weight and composition.',                           iconName: 'remove',        colorHex: '#94A3B8', displayOrder: 7 },
   { name: 'General Fitness',    slug: 'general-fitness',    description: 'Stay healthy, active and consistent.',                                iconName: 'heart',         colorHex: '#F472B6', displayOrder: 8 },
 ];
+
+// ------------------------------------------------------------- food library
+// Starter Food Library. Values are approximate per the stated serving and are
+// shown in the app as estimates. Created only when missing, so edits made in
+// the app survive later deploys.
+export interface SeedFood {
+  name: string;
+  category: string;
+  servingSize: number;
+  servingUnit: string;
+  calories: number;
+  proteinG: number;
+  carbsG: number;
+  fatG: number;
+  fibreG?: number;
+}
+
+export const FOODS: SeedFood[] = [
+  // Protein
+  { name: 'Boiled Egg', category: 'Protein', servingSize: 1, servingUnit: 'piece', calories: 70, proteinG: 6, carbsG: 0.5, fatG: 5 },
+  { name: 'Egg White', category: 'Protein', servingSize: 1, servingUnit: 'piece', calories: 17, proteinG: 3.6, carbsG: 0.2, fatG: 0.1 },
+  { name: 'Chicken Breast (cooked)', category: 'Protein', servingSize: 100, servingUnit: 'g', calories: 165, proteinG: 31, carbsG: 0, fatG: 3.6 },
+  { name: 'Fish Curry', category: 'Protein', servingSize: 1, servingUnit: 'cup', calories: 220, proteinG: 22, carbsG: 6, fatG: 12 },
+  { name: 'Paneer', category: 'Protein', servingSize: 100, servingUnit: 'g', calories: 265, proteinG: 18, carbsG: 1.2, fatG: 21 },
+  { name: 'Whey Protein', category: 'Protein', servingSize: 1, servingUnit: 'scoop', calories: 120, proteinG: 24, carbsG: 3, fatG: 1.5 },
+  // Dairy
+  { name: 'Milk (toned)', category: 'Dairy', servingSize: 250, servingUnit: 'ml', calories: 150, proteinG: 8, carbsG: 12, fatG: 7.5 },
+  { name: 'Curd', category: 'Dairy', servingSize: 100, servingUnit: 'g', calories: 60, proteinG: 3.5, carbsG: 4.7, fatG: 3.1 },
+  // Grains
+  { name: 'Oats', category: 'Grains', servingSize: 40, servingUnit: 'g', calories: 150, proteinG: 5, carbsG: 27, fatG: 2.5, fibreG: 4 },
+  { name: 'White Rice (cooked)', category: 'Grains', servingSize: 1, servingUnit: 'cup', calories: 205, proteinG: 4.3, carbsG: 45, fatG: 0.4, fibreG: 0.6 },
+  { name: 'Chapati', category: 'Grains', servingSize: 1, servingUnit: 'piece', calories: 104, proteinG: 3, carbsG: 18, fatG: 2.5, fibreG: 2 },
+  { name: 'Idli', category: 'Grains', servingSize: 1, servingUnit: 'piece', calories: 58, proteinG: 2, carbsG: 12, fatG: 0.4 },
+  { name: 'Dosa', category: 'Grains', servingSize: 1, servingUnit: 'piece', calories: 133, proteinG: 3, carbsG: 22, fatG: 3.7 },
+  { name: 'Brown Bread Toast', category: 'Grains', servingSize: 1, servingUnit: 'slice', calories: 75, proteinG: 3, carbsG: 13, fatG: 1, fibreG: 2 },
+  // Legumes
+  { name: 'Dal (cooked)', category: 'Legumes', servingSize: 1, servingUnit: 'cup', calories: 180, proteinG: 12, carbsG: 30, fatG: 2, fibreG: 8 },
+  { name: 'Chickpeas (cooked)', category: 'Legumes', servingSize: 1, servingUnit: 'cup', calories: 270, proteinG: 15, carbsG: 45, fatG: 4, fibreG: 12 },
+  // Fruits
+  { name: 'Banana', category: 'Fruits', servingSize: 1, servingUnit: 'piece', calories: 105, proteinG: 1.3, carbsG: 27, fatG: 0.4, fibreG: 3.1 },
+  { name: 'Apple', category: 'Fruits', servingSize: 1, servingUnit: 'piece', calories: 95, proteinG: 0.5, carbsG: 25, fatG: 0.3, fibreG: 4.4 },
+  { name: 'Orange', category: 'Fruits', servingSize: 1, servingUnit: 'piece', calories: 62, proteinG: 1.2, carbsG: 15, fatG: 0.2, fibreG: 3.1 },
+  // Vegetables
+  { name: 'Mixed Vegetable Curry', category: 'Vegetables', servingSize: 1, servingUnit: 'cup', calories: 150, proteinG: 4, carbsG: 15, fatG: 8, fibreG: 5 },
+  { name: 'Green Salad', category: 'Vegetables', servingSize: 1, servingUnit: 'bowl', calories: 35, proteinG: 2, carbsG: 7, fatG: 0.3, fibreG: 3 },
+  // Nuts
+  { name: 'Almonds', category: 'Nuts & Seeds', servingSize: 10, servingUnit: 'piece', calories: 70, proteinG: 2.6, carbsG: 2.5, fatG: 6, fibreG: 1.5 },
+  { name: 'Peanut Butter', category: 'Nuts & Seeds', servingSize: 1, servingUnit: 'tbsp', calories: 95, proteinG: 4, carbsG: 3, fatG: 8 },
+  // Drinks
+  { name: 'Black Coffee', category: 'Drinks', servingSize: 1, servingUnit: 'cup', calories: 2, proteinG: 0.3, carbsG: 0, fatG: 0 },
+  { name: 'Tea with Milk & Sugar', category: 'Drinks', servingSize: 1, servingUnit: 'cup', calories: 70, proteinG: 2, carbsG: 10, fatG: 2 },
+];

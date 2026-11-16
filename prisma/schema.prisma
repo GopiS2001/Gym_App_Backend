@@ -207,6 +207,14 @@ model UserSetting {
   notificationEnabled    Boolean         @default(true) @map("notification_enabled")
   workoutReminderEnabled Boolean         @default(true) @map("workout_reminder_enabled")
   waterReminderEnabled   Boolean         @default(true) @map("water_reminder_enabled")
+  /// Workout schedule used by pre/post-workout reminders. Time is local
+  /// "HH:mm"; days is an array of WeekDay names, or null to use the days of
+  /// the active workout plan (every day if there is none).
+  workoutTime            String?         @map("workout_time") @db.VarChar(5)
+  workoutDays            Json?           @map("workout_days")
+  workoutDurationMin     Int             @default(60) @map("workout_duration_min")
+  preWorkoutLeadMin      Int             @default(60) @map("pre_workout_lead_min")
+  postWorkoutDelayMin    Int             @default(30) @map("post_workout_delay_min")
   createdAt              DateTime        @default(now()) @map("created_at")
   updatedAt              DateTime        @updatedAt @map("updated_at")
 

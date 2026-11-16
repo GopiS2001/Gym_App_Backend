@@ -11,7 +11,7 @@
 import { PrismaClient } from '@prisma/client';
 import * as argon2 from 'argon2';
 import * as dotenv from 'dotenv';
-import { CATEGORIES, EXERCISES, GOAL_TYPES } from './seed-data';
+import { CATEGORIES, EXERCISES, FOODS, GOAL_TYPES } from './seed-data';
 
 dotenv.config();
 

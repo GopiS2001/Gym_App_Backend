@@ -48,6 +48,8 @@ import { HealthController } from './health.controller';
     WorkoutSessionsModule,
     ProgressModule,
     NutritionModule,
+    FoodsModule,
+    MealRemindersModule,
     WaterModule,
     SleepModule,
     AttendanceModule,

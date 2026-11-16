@@ -1,6 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { FoodLog, Prisma } from '@prisma/client';
 import { PrismaService } from '../database/prisma.service';
+import { FoodsService, nutritionFor } from '../foods/foods.service';
 import { buildPaginatedResult } from '../common/dto/pagination.dto';
 import {
   addDays,

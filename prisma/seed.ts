@@ -193,6 +193,44 @@ async function main() {
   }
   console.log(`  goal types     : ${goalTypeIds.size}`);
 
+  // ---------------------------------------------------------- food library
+  // Create-only: a food edited in the app keeps its edits across deploys.
+  let foodsCreated = 0;
+  for (const f of FOODS) {
+    const existing = await prisma.food.findFirst({
+      where: { name: f.name, userId: null },
+      select: { id: true },
+    });
+    if (existing) continue;
+    await prisma.food.create({
+      data: {
+        userId: null,
+        name: f.name,
+        category: f.category,
+        servingSize: f.servingSize,
+        servingUnit: f.servingUnit,
+        calories: f.calories,
+        proteinG: f.proteinG,
+        carbsG: f.carbsG,
+        fatG: f.fatG,
+        fibreG: f.fibreG ?? null,
+        isCustom: false,
+        isActive: true,
+      },
+    });
+    foodsCreated += 1;
+  }
+  console.log(`  food library   : ${FOODS.length} (${foodsCreated} new)`);
+
+  // Everything below is sample activity: a goal, a plan, workouts, logs and
+  // photos. The seed runs on every deploy, so this only happens when asked
+  // for — otherwise a deploy would refill data you deliberately deleted.
+  if (process.env.SEED_DEMO_DATA !== 'true') {
+    console.log('  demo data      : skipped (set SEED_DEMO_DATA=true to add it)');
+    console.log('\nSeed complete.');
+    return;
+  }
+
   // ---------------------------------------------------------------- goal
   const existingGoal = await prisma.fitnessGoal.findFirst({
     where: { userId: user.id },

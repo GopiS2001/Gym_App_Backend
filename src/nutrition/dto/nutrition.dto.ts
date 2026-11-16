@@ -99,6 +99,15 @@ export class CreateFoodLogDto {
   @IsDateString()
   consumedAt?: string;
 
+  @ApiPropertyOptional({
+    description:
+      'Intake date (YYYY-MM-DD) on the phone’s own calendar. Without it the ' +
+      'UTC date of consumedAt is used, which is the wrong day near midnight.',
+  })
+  @IsOptional()
+  @Matches(/^\d{4}-\d{2}-\d{2}$/, { message: 'Intake date must be YYYY-MM-DD' })
+  loggedDate?: string;
+
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()

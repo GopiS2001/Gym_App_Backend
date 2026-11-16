@@ -6,9 +6,12 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  IsUUID,
+  Matches,
   MaxLength,
   Min,
   MinLength,
+  ValidateIf,
 } from 'class-validator';
 import { DateRangeDto } from '../../common/dto/pagination.dto';
 

@@ -88,6 +88,25 @@ enum MealType {
   SNACKS
   PRE_WORKOUT
   POST_WORKOUT
+  BEFORE_BED
+}
+
+enum ReminderType {
+  PRE_WORKOUT
+  BREAKFAST
+  POST_WORKOUT
+  LUNCH
+  SNACK
+  DINNER
+  BEFORE_BED
+  WATER
+  CUSTOM
+}
+
+enum ReminderWorkoutLink {
+  NONE
+  BEFORE
+  AFTER
 }
 
 enum SleepQuality {

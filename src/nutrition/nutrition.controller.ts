@@ -59,11 +59,19 @@ export class NutritionController {
   }
 
   @Get('history')
-  @ApiOperation({ summary: 'Daily nutrition totals over a range' })
-  async history(@CurrentUser('userId') userId: string, @Query('days') days?: string) {
+  @ApiOperation({
+    summary: 'Daily nutrition totals over a range (7 = week, 30 = month; max 90)',
+  })
+  async history(
+    @CurrentUser('userId') userId: string,
+    @Query('days') days?: string,
+    @Query('endDate') endDate?: string,
+  ) {
+    const parsed = days ? parseInt(days, 10) : 7;
     const data = await this.nutritionService.history(
       userId,
-      days ? parseInt(days, 10) : 7,
+      Math.min(90, Math.max(1, Number.isFinite(parsed) ? parsed : 7)),
+      endDate,
     );
     return { ...data, __message: 'Nutrition history retrieved successfully' };
   }

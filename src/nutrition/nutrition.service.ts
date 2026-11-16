@@ -85,24 +85,32 @@ export class NutritionService {
       if (existing) return existing;
     }
 
-    return this.prisma.foodLog.create({
+    const values = dto.foodId
+      ? await this.snapshotFromLibrary(userId, dto.foodId, dto.quantity ?? 1)
+      : {
+          foodId: null,
+          foodName: dto.foodName,
+          quantity: dto.quantity ?? 1,
+          quantityUnit: dto.quantityUnit || 'serving',
+          calories: dto.calories,
+          proteinG: dto.proteinG ?? 0,
+          carbsG: dto.carbsG ?? 0,
+          fatG: dto.fatG ?? 0,
+          imageUrl: dto.imageUrl,
+        };
+
+    const created = await this.prisma.foodLog.create({
       data: {
         userId,
         clientOpId: dto.clientOpId || null,
-        foodName: dto.foodName,
         mealType: dto.mealType as any,
-        quantity: dto.quantity ?? 1,
-        quantityUnit: dto.quantityUnit || 'serving',
-        calories: dto.calories,
-        proteinG: dto.proteinG ?? 0,
-        carbsG: dto.carbsG ?? 0,
-        fatG: dto.fatG ?? 0,
-        imageUrl: dto.imageUrl,
+        ...values,
         consumedAt,
-        loggedDate: toDateOnly(consumedAt),
+        loggedDate,
         notes: dto.notes,
       },
     });
+    return { ...created, mealTypeLabel: MEAL_LABELS[created.mealType] };
   }
 
   async findAll(userId: string, query: QueryFoodLogsDto) {

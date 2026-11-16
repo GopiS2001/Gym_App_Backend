@@ -18,21 +18,63 @@ import {
   UpdateFoodLogDto,
 } from './dto/nutrition.dto';
 
+// In order through the day; the daily summary lists meals in this order.
 const MEAL_LABELS: Record<string, string> = {
-  BREAKFAST: 'Breakfast',
-  LUNCH: 'Lunch',
-  DINNER: 'Dinner',
-  SNACKS: 'Snacks',
   PRE_WORKOUT: 'Pre-Workout',
+  BREAKFAST: 'Breakfast',
   POST_WORKOUT: 'Post-Workout',
+  LUNCH: 'Lunch',
+  SNACKS: 'Evening Snacks',
+  DINNER: 'Dinner',
+  BEFORE_BED: 'Before Bed',
 };
 
 @Injectable()
 export class NutritionService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly foodsService: FoodsService,
+  ) {}
+
+  /**
+   * Name, unit, image and nutrition for `quantity` of a library food, as a
+   * snapshot to store on the entry.
+   */
+  private async snapshotFromLibrary(userId: string, foodId: string, quantity: number) {
+    const food = await this.foodsService.findOne(userId, foodId);
+    if (!food.isActive) {
+      throw new BadRequestException('That food was removed from the library');
+    }
+    return {
+      foodId: food.id,
+      foodName: food.name,
+      quantity,
+      quantityUnit: food.servingUnit,
+      imageUrl: food.imageUrl,
+      ...nutritionFor(food, quantity),
+    };
+  }
+
+  /**
+   * New nutrition for an entry whose quantity changed, scaled from the
+   * entry's own snapshot rather than the library, so later library edits
+   * never leak into history.
+   */
+  private rescaleSnapshot(entry: FoodLog, quantity: number) {
+    const old = toNumber(entry.quantity);
+    if (!old) return {};
+    const factor = quantity / old;
+    return {
+      calories: round(toNumber(entry.calories) * factor, 2),
+      proteinG: round(toNumber(entry.proteinG) * factor, 2),
+      carbsG: round(toNumber(entry.carbsG) * factor, 2),
+      fatG: round(toNumber(entry.fatG) * factor, 2),
+    };
+  }
 
   async create(userId: string, dto: CreateFoodLogDto) {
     const consumedAt = dto.consumedAt ? new Date(dto.consumedAt) : new Date();
+    const loggedDate = toDateOnly(dto.loggedDate || consumedAt);
 
     // An offline client replays queued writes with the same key; returning
     // the original row keeps a retry from creating a duplicate meal.

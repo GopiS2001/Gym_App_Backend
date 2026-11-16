@@ -1,5 +1,5 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
-import { MealReminder, UserSetting } from '@prisma/client';
+import { MealReminder, Prisma, UserSetting } from '@prisma/client';
 import { PrismaService } from '../database/prisma.service';
 import {
   CreateMealReminderDto,

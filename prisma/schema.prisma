@@ -561,11 +561,39 @@ model FoodLog {
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  food Food? @relation(fields: [foodId], references: [id], onDelete: SetNull)
 
   @@index([userId, loggedDate])
   @@index([userId, mealType])
+  @@index([foodId])
   @@map("food_logs")
+}
+
+/// A scheduled meal / water / workout-nutrition reminder. Notifications are
+/// scheduled on the phone; this row is the source of truth they are rebuilt
+/// from. When `workoutLink` is BEFORE or AFTER, the time and days come from
+/// the workout schedule in user_settings instead of `reminderTime`/`repeatDays`.
+model MealReminder {
+  id            String              @id @default(uuid()) @db.Char(36)
+  userId        String              @map("user_id") @db.Char(36)
+  title         String              @db.VarChar(80)
+  reminderType  ReminderType        @map("reminder_type")
+  /// Local wall-clock time, "HH:mm".
+  reminderTime  String              @map("reminder_time") @db.VarChar(5)
+  /// Array of WeekDay names; empty means every day.
+  repeatDays    Json                @map("repeat_days")
+  message       String?             @db.Text
+  isEnabled     Boolean             @default(true) @map("is_enabled")
+  workoutLink   ReminderWorkoutLink @default(NONE) @map("workout_link")
+  snoozeMinutes Int                 @default(10) @map("snooze_minutes")
+  createdAt     DateTime            @default(now()) @map("created_at")
+  updatedAt     DateTime            @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("meal_reminders")
 }
 
 model WaterLog {

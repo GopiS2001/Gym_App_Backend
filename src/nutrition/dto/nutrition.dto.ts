@@ -22,10 +22,22 @@ export enum MealTypeDto {
   SNACKS = 'SNACKS',
   PRE_WORKOUT = 'PRE_WORKOUT',
   POST_WORKOUT = 'POST_WORKOUT',
+  BEFORE_BED = 'BEFORE_BED',
 }
 
 export class CreateFoodLogDto {
+  @ApiPropertyOptional({
+    description:
+      'Food Library item. When set, name, unit and nutrition are calculated ' +
+      'from the library for `quantity` (in the food’s serving unit) and saved ' +
+      'as a snapshot; values sent for them are ignored.',
+  })
+  @IsOptional()
+  @IsUUID('all', { message: 'Please choose a food from the library' })
+  foodId?: string;
+
   @ApiProperty({ example: 'Grilled Chicken Salad' })
+  @ValidateIf((o) => !o.foodId)
   @IsString()
   @MinLength(2, { message: 'Food name must be at least 2 characters' })
   @MaxLength(160)

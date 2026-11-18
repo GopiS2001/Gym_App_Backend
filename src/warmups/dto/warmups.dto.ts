@@ -1,6 +1,8 @@
 import { ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
 import {
+  ArrayMaxSize,
+  IsArray,
   IsInt,
   IsOptional,
   IsString,
@@ -54,6 +56,23 @@ export class CreateWarmupDto {
   @IsString()
   @Transform(trim)
   description?: string | null;
+
+  @ApiPropertyOptional({ type: [String], description: 'Gallery images, in display order' })
+  @IsOptional()
+  @IsArray()
+  @ArrayMaxSize(10, { message: 'A warm-up can have at most 10 images' })
+  @IsString({ each: true })
+  imageUrls?: string[];
+
+  @ApiPropertyOptional({ description: 'Banner image. Empty string clears it.' })
+  @IsOptional()
+  @IsString()
+  backgroundImageUrl?: string;
+
+  @ApiPropertyOptional({ description: 'A video link or the URL of an uploaded video. Empty string clears it.' })
+  @IsOptional()
+  @IsString()
+  videoUrl?: string;
 }
 
 export class UpdateWarmupDto extends PartialType(CreateWarmupDto) {}

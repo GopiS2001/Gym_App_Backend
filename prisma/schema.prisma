@@ -360,6 +360,12 @@ model Warmup {
   durationSeconds Int?     @map("duration_seconds")
   reps            Int?
   description     String?  @db.Text
+  /// Cover image; always the first entry of `imageUrls` when that is set.
+  imageUrl           String? @map("image_url") @db.Text
+  imageUrls          Json?   @map("image_urls")
+  backgroundImageUrl String? @map("background_image_url") @db.Text
+  /// A link (YouTube etc.) or the URL of an uploaded video file.
+  videoUrl           String? @map("video_url") @db.Text
   createdAt       DateTime @default(now()) @map("created_at")
   updatedAt       DateTime @updatedAt @map("updated_at")
 

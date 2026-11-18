@@ -47,6 +47,7 @@ export class WarmupsService {
         durationSeconds: dto.durationSeconds ?? null,
         reps: dto.reps ?? null,
         description: dto.description || null,
+        ...this.mediaFields(dto),
       },
       include,
     });
@@ -55,7 +56,8 @@ export class WarmupsService {
   async update(userId: string, id: string, dto: UpdateWarmupDto) {
     await this.findOne(userId, id);
     if (dto.categoryId !== undefined) await this.checkCategory(userId, dto.categoryId);
-    const data: Prisma.WarmupUncheckedUpdateInput = { ...dto };
+    const { imageUrls, backgroundImageUrl, videoUrl, ...rest } = dto;
+    const data: Prisma.WarmupUncheckedUpdateInput = { ...rest, ...this.mediaFields(dto) };
     if (dto.description !== undefined) data.description = dto.description || null;
     return this.prisma.warmup.update({ where: { id }, data, include });
   }
@@ -64,6 +66,22 @@ export class WarmupsService {
     await this.findOne(userId, id);
     await this.prisma.warmup.delete({ where: { id } });
     return { id, deleted: true };
+  }
+
+  /**
+   * Media columns from a create/update body. Empty strings clear a value, and
+   * the cover image always follows the first gallery image.
+   */
+  private mediaFields(dto: UpdateWarmupDto) {
+    const out: Record<string, any> = {};
+    if (dto.imageUrls !== undefined) {
+      const urls = [...new Set(dto.imageUrls.map((u) => u.trim()).filter(Boolean))];
+      out.imageUrls = urls;
+      out.imageUrl = urls[0] ?? null;
+    }
+    if (dto.backgroundImageUrl !== undefined) out.backgroundImageUrl = dto.backgroundImageUrl.trim() || null;
+    if (dto.videoUrl !== undefined) out.videoUrl = dto.videoUrl.trim() || null;
+    return out;
   }
 
   /** The category is optional, but when given it must be one the user can see. */

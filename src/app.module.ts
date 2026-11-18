@@ -22,6 +22,7 @@ import { AttendanceModule } from './attendance/attendance.module';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { MediaModule } from './media/media.module';
 import { SettingsModule } from './settings/settings.module';
+import { WarmupsModule } from './warmups/warmups.module';
 
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
@@ -56,6 +57,7 @@ import { HealthController } from './health.controller';
     AnalyticsModule,
     MediaModule,
     SettingsModule,
+    WarmupsModule,
   ],
   controllers: [HealthController],
   providers: [

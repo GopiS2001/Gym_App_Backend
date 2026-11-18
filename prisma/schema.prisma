@@ -169,6 +169,7 @@ model User {
   mediaAssets      MediaAsset[]
   refreshTokens    RefreshToken[]
   favourites       ExerciseFavourite[]
+  warmups          Warmup[]
 
   @@index([email])
   @@map("users")
@@ -306,6 +307,7 @@ model WorkoutCategory {
 
   user      User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
   exercises Exercise[]
+  warmups   Warmup[]
 
   @@index([displayOrder])
   @@map("workout_categories")
@@ -346,6 +348,26 @@ model Exercise {
   @@index([name])
   @@index([difficultyLevel])
   @@map("exercises")
+}
+
+/// A warm-up drill done before training. The category is optional: a
+/// warm-up with none is a general one that suits any session.
+model Warmup {
+  id              String   @id @default(uuid()) @db.Char(36)
+  userId          String   @map("user_id") @db.Char(36)
+  categoryId      String?  @map("category_id") @db.Char(36)
+  name            String   @db.VarChar(140)
+  durationSeconds Int?     @map("duration_seconds")
+  reps            Int?
+  description     String?  @db.Text
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  user     User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category WorkoutCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+
+  @@index([userId, categoryId])
+  @@map("warmups")
 }
 
 model ExerciseFavourite {

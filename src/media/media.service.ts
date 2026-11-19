@@ -109,7 +109,7 @@ export class MediaService {
     const targetDir = join(process.cwd(), uploadDir, safeFolder);
     await fs.mkdir(targetDir, { recursive: true });
 
-    const ext = extname(file.originalname) || (isImage ? '.jpg' : '.mp4');
+    const ext = extname(file.originalname) || (isImage ? '.jpg' : isAudio ? '.mp3' : '.mp4');
     const filename = `${randomUUID()}${ext.toLowerCase()}`;
     const storageKey = `${safeFolder}/${filename}`;
 

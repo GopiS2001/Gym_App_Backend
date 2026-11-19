@@ -135,6 +135,7 @@ enum HeightUnit {
 enum MediaType {
   IMAGE
   VIDEO
+  AUDIO
 }
 
 // ---------------------------------------------------------------- CORE

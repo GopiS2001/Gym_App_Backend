@@ -47,6 +47,7 @@ export class SongsService {
         movieTitle: dto.movieTitle,
         songName: dto.songName,
         imageUrl: dto.imageUrl || null,
+        audioUrl: dto.audioUrl || null,
       },
     });
   }

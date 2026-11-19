@@ -82,19 +82,25 @@ export class MediaService {
 
     const isImage = IMAGE_MIME.includes(file.mimetype);
     const isVideo = VIDEO_MIME.includes(file.mimetype);
-    if (!isImage && !isVideo) {
+    const isAudio =
+      AUDIO_MIME.includes(file.mimetype) ||
+      (!isImage && !isVideo && AUDIO_EXT.includes(extname(file.originalname || '').toLowerCase()));
+    if (!isImage && !isVideo && !isAudio) {
       throw new BadRequestException(
-        `Unsupported file type "${file.mimetype}". Upload an image or a video.`,
+        `Unsupported file type "${file.mimetype}". Upload an image, a video or an audio file.`,
       );
     }
 
-    // Videos get their own, larger cap: a short phone clip easily passes 15 MB.
+    // Videos and audio get their own, larger caps: a short phone clip or a
+    // high-bitrate song easily passes 15 MB.
     const maxMb = isVideo
       ? Number(this.config.get('MAX_VIDEO_UPLOAD_MB') || 100)
-      : Number(this.config.get('MAX_UPLOAD_MB') || 15);
+      : isAudio
+        ? Number(this.config.get('MAX_AUDIO_UPLOAD_MB') || 50)
+        : Number(this.config.get('MAX_UPLOAD_MB') || 15);
     if (file.size > maxMb * 1024 * 1024) {
       throw new BadRequestException(
-        `${isVideo ? 'Video' : 'Image'} must be smaller than ${maxMb} MB`,
+        `${isVideo ? 'Video' : isAudio ? 'Audio file' : 'Image'} must be smaller than ${maxMb} MB`,
       );
     }
 

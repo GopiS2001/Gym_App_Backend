@@ -58,6 +58,7 @@ export class SongsService {
     if (dto.movieTitle !== undefined) data.movieTitle = dto.movieTitle;
     if (dto.songName !== undefined) data.songName = dto.songName;
     if (dto.imageUrl !== undefined) data.imageUrl = dto.imageUrl || null;
+    if (dto.audioUrl !== undefined) data.audioUrl = dto.audioUrl || null;
     return this.prisma.song.update({ where: { id }, data });
   }
 

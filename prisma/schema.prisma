@@ -170,6 +170,7 @@ model User {
   refreshTokens    RefreshToken[]
   favourites       ExerciseFavourite[]
   warmups          Warmup[]
+  songs            Song[]
 
   @@index([email])
   @@map("users")

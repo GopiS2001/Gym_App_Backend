@@ -23,6 +23,7 @@ import { AnalyticsModule } from './analytics/analytics.module';
 import { MediaModule } from './media/media.module';
 import { SettingsModule } from './settings/settings.module';
 import { WarmupsModule } from './warmups/warmups.module';
+import { SongsModule } from './songs/songs.module';
 
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';

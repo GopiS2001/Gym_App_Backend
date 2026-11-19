@@ -59,6 +59,7 @@ import { HealthController } from './health.controller';
     MediaModule,
     SettingsModule,
     WarmupsModule,
+    SongsModule,
   ],
   controllers: [HealthController],
   providers: [

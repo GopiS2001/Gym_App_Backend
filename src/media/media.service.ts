@@ -120,7 +120,7 @@ export class MediaService {
     return this.prisma.mediaAsset.create({
       data: {
         userId,
-        mediaType: isImage ? 'IMAGE' : 'VIDEO',
+        mediaType: isImage ? 'IMAGE' : isAudio ? 'AUDIO' : 'VIDEO',
         storageProvider: 'local',
         storageKey,
         mediaUrl: `${baseUrl}/${uploadDir}/${storageKey}`,

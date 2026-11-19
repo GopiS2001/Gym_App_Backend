@@ -711,13 +711,14 @@ model GymAttendance {
 // ---------------------------------------------------------------- MUSIC
 
 /// A song in the user's workout music list: the film it comes from, its name
-/// and a cover picture.
+/// a cover picture and the uploaded audio file the player streams.
 model Song {
   id         String   @id @default(uuid()) @db.Char(36)
   userId     String   @map("user_id") @db.Char(36)
   movieTitle String   @map("movie_title") @db.VarChar(160)
   songName   String   @map("song_name") @db.VarChar(160)
   imageUrl   String?  @map("image_url") @db.Text
+  audioUrl   String?  @map("audio_url") @db.Text
   createdAt  DateTime @default(now()) @map("created_at")
   updatedAt  DateTime @updatedAt @map("updated_at")
 

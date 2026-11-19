@@ -25,6 +25,12 @@ export class CreateSongDto {
   @Transform(trim)
   @IsString()
   imageUrl?: string | null;
+
+  @ApiPropertyOptional({ description: 'Audio file URL; empty string or null clears it' })
+  @IsOptional()
+  @Transform(trim)
+  @IsString()
+  audioUrl?: string | null;
 }
 
 export class UpdateSongDto {

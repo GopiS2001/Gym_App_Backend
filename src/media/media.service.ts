@@ -23,6 +23,27 @@ const VIDEO_MIME = [
   'video/x-m4v',
   'video/x-matroska',
 ];
+const AUDIO_MIME = [
+  'audio/mpeg',
+  'audio/mp3',
+  'audio/mp4',
+  'audio/m4a',
+  'audio/x-m4a',
+  'audio/aac',
+  'audio/x-aac',
+  'audio/wav',
+  'audio/x-wav',
+  'audio/wave',
+  'audio/ogg',
+  'audio/flac',
+  'audio/x-flac',
+  'audio/webm',
+  'audio/3gpp',
+  'audio/amr',
+];
+// Some Android file providers report audio as application/octet-stream, so a
+// known audio extension is accepted too.
+const AUDIO_EXT = ['.mp3', '.m4a', '.aac', '.wav', '.ogg', '.oga', '.flac', '.opus', '.amr'];
 
 @Injectable()
 export class MediaService {

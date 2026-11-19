@@ -707,6 +707,25 @@ model GymAttendance {
   @@map("gym_attendance")
 }
 
+// ---------------------------------------------------------------- MUSIC
+
+/// A song in the user's workout music list: the film it comes from, its name
+/// and a cover picture.
+model Song {
+  id         String   @id @default(uuid()) @db.Char(36)
+  userId     String   @map("user_id") @db.Char(36)
+  movieTitle String   @map("movie_title") @db.VarChar(160)
+  songName   String   @map("song_name") @db.VarChar(160)
+  imageUrl   String?  @map("image_url") @db.Text
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, movieTitle])
+  @@map("songs")
+}
+
 // ---------------------------------------------------------------- MEDIA
 
 model MediaAsset {
